@@ -1,0 +1,1 @@
+Here you can find all the raw materials used for building the product animation, such as video script, voice-over, images, etc.
