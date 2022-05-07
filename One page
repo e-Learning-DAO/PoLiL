@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>website</title>
+	<link rel="stylesheet" href="style.css">
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/magnific-popup.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.0.0/jquery.magnific-popup.min.js"></script>
+
+</head>
+<body>
+<section id="main">
+<style class="img">
+	body{
+ 	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5),  rgba(0, 0, 0, 0.5)), url('bg_banner.png');
+ 	background-attachment: fixed;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+</style>
+	<div>
+		<h1 class="head">Lorem Ipsum is simply dummy text</h1>
+		<p class="par">LOREM IPSUM</p>
+	</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <p class="text-center mt-5">
+        <a href="#headerPopup" id="headerVideoLink" target="_blank" ><img class="thumbnail" src="ssc.png" width="50%"	></a>
+      </p>
+      <div id="headerPopup" class="mfp-hide embed-responsive embed-responsive-21by9">
+        <iframe class="embed-responsive-item" width="854" height="480" src="Polil.mp4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<section  id="about">
+	<div>
+		<h1 class="had">Loremipsum</h1>
+		<hr style="width:30%;height: 2px; background: gray; text-align:center;margin-left:50">
+		<p class="parag">Just click “Edit Text” or double click me to add your own content and make changes to the font. Feel free to drag and drop me anywhere you like on your page. I’m a great place for you to tell a story and let your users know a little more about you. ​This is a great space to write long text about your company and your services. You can use this space to go into a little more detail about your company. Talk about your team and what services you provide. Tell your visitors the story of how you came up with the idea for your business and what makes you different from your competitors. Make your company stand out and show your visitors who you are. </p>
+		<h2 class="header">Credits</h2>
+		<p class="paara">I'm a paragraph. Click here to add your own text and edit me. It’s easy. Just click “Edit Text” or double click me to add your own content and make changes to the font.</p>
+
+	</div>	
+</section>
+		<div class="sub-footer">
+        <p>Copyright &copy; 2022 Company Name - <a rel="nofollow" href="http://www.Polil.com"> Polil</a></p>
+    </div>
+</body>
+
+<script>
+  $( document ).ready(function() {
+	$('#headerVideoLink').magnificPopup({
+	type:'inline',
+	midClick: true // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
+	});
+});
+   
+</script>
+
+</html>
