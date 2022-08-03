@@ -1,3 +1,5 @@
+# THIS REPOSITORY IS DEPRECATED! The project is now a component of a larger framework, managed by a dedicated DAO. Please use https://github.com/e-Learning-DAO/PoLiL 
+
 [![PoLiL](https://raw.githubusercontent.com/AltiMario/PoLiL/main/website/polil.net/logo-white.png)](https://www.polil.net/)
 
 _A non-siloed lifelong learning journey without vendor lock-in_
