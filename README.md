@@ -1,4 +1,4 @@
-[![PoLiL](https://raw.githubusercontent.com/AltiMario/PoLiL/main/website/polil.net/logo-white.png)](https://www.polil.net/)
+[![PoLiL](https://raw.githubusercontent.com/e-Learning-DAO/PoLiL/main/website/polil.net/logo-white.png)](https://www.polil.net/)
 
 _A non-siloed lifelong learning journey without vendor lock-in_
 
