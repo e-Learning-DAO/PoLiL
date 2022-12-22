@@ -96,13 +96,8 @@ function App() {
   return (
     <div className="w-screen h-screen bg-white overflow-auto">
         <div className="container max-w-6xl p-16  h-full w-full">
-            <header className="mb-3 py-6 w-full flex flex-col justify-between">
-                {/* <div className='flex'>
-                    <img src="/logo.svg" className="mr-4 h-6" alt="TxPipe Logo" />
-                    <h2 className="text-m text-gray-400 font-normal">Starter Kit provided by TxPipe</h2>
-                </div> */}
-                
-                <h3 className="text-3xl text-orange-500 font-extrabold mt-4 ">Polil - Proof Of Lifelong learning - Home</h3>
+            <header className="mb-3 py-6 w-full flex flex-col justify-between">                
+                <h3 className="text-3xl text-orange-500 font-extrabold mt-4 ">Proof Of Lifelong Learning - Connection</h3>
                 <div className="mt-8 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4">
                     <h1 className="font-bold">Connect to a Wallet</h1>
                     <h3 className="text-sm text-blue-500 mt-2">Select which wallet to connect and perform basic interactions.</h3>
@@ -129,22 +124,13 @@ function App() {
                     {message ? <a className="text-[#194866] underline mt-3 text-sm" href={message} target="_blank">{message}</a> : null}
                   </div>
                 <div className="flex justify-between items-center">
-                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{getMoodleLink(address)}}>Access your learning journey</button>
-                    <div className='flex'>
-                      <img src="/logo.svg" className="mr-4 h-6" alt="TxPipe Logo" />
-                      <h2 className="text-m text-gray-400 font-normal">Starter Kit provided by TxPipe</h2>
-                    </div>
+                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4">Access to your learning journey</button>
                   </div></> : <></>
                 }
               </> : 
               <><div className="flex justify-between items-center">
                   <div>
                     <h3 className="text-l text-gray-600 font-extrabold mt-4">No wallet is enabled. Select a Wallet to enabled it</h3>
-                  </div>
-                  
-                  <div className='flex '>
-                    <img src="/logo.svg" className="mr-4 h-6" alt="TxPipe Logo" />
-                    <h2 className="text-m text-gray-600 font-normal">Starter Kit provided by TxPipe</h2>
                   </div>
                 </div></>}
 
