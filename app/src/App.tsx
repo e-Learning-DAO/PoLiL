@@ -59,40 +59,6 @@ function App() {
     }
   }, []);
 
-  const getMoodleLink = async function (addr:any) {
-
-    const raw = await getChangeAddress();
-    console.log(Buffer.from(raw, "hex"))
-    const changeAddress = Address.from_bytes(Buffer.from(raw, "hex")).to_bech32()
-    console.log(changeAddress)
-
-    var accaddrHash = md5(changeAddress)
-
-    var MOODLEURL = 'http://x.x.x.x/' // @CONFIG You can set your Moodle URL here.
-    var MOODLEAPITOKEN = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' // @CONFIG You can set Moodle Webservice Token here.
-    var url = MOODLEURL + '/webservice/rest/server.php?wstoken=' + MOODLEAPITOKEN + '&wsfunction=auth_userkey_request_login_url&moodlewsrestformat=json';
-
-    const postdata = new FormData();
-    postdata.append('user[username]', accaddrHash.toLowerCase());
-    postdata.append('user[idnumber]', changeAddress.toLowerCase());
-
-    fetch(url, {
-      method: 'POST',
-      body: postdata
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data)
-      if(data['errorcode'])
-        // alert(data['message'])
-       setMessage(data['message'])
-      else {
-        // alert(data['loginurl']) // This is the loginurl which can be used to access the Moodle without entring any further details.
-        setMessage(data['loginurl'])
-      }
-    });
-  };
-
   return (
     <div className="w-screen h-screen bg-white overflow-auto">
         <div className="container max-w-6xl p-16  h-full w-full">
