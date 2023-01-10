@@ -227,7 +227,8 @@ function App() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data)
-      setMessage(data['message'])
+      setMessage(data['message'] + " => " + submittedTxHash)
+      setXAPIStatements([])
     });
   }
 
@@ -247,7 +248,7 @@ function App() {
       }
       else {
         //postToCardano(data['hashes'])
-        setXAPIStatements(data['hashes'])
+        setXAPIStatements(Object.values(data['hashes']))
       }
     });
   };
@@ -284,7 +285,7 @@ function App() {
                   </div>
                   <div className="flex ">
                     <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{getMoodleLink(address)}}>Get Moodle Login</button>
-                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4 ml-4" onClick={()=>{fetchPendingStatements(address)}}>Fetch Pending xAPI Statements</button>
+                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4 ml-4" onClick={()=>{fetchPendingStatements(address)}}>Get Pending xAPI Statements</button>
                   </div>
                   
                   {xapiStatements.length > 0 ?
