@@ -26,6 +26,16 @@ function WalletCard(props: { wallet: WalletInfo, handleClick: Function }) {
   );
 }
 
+interface xAPIStatement {
+  id: string;
+  wallet_address: string;
+  statement_id: string,
+  hash: string,
+  status: string,
+  processed_time: string,
+  error: string
+}
+
 function App() {
   const [wallets, setWallets] = useState([] as WalletInfo[]);
   const [enabledWallet, setEnabledWallet] = useState<WalletInfo>();
@@ -34,6 +44,7 @@ function App() {
   const [address, setAddress] = useState<Address>();
   const [error, setError] = useState();
   const [message, setMessage] = useState("");
+  const [xapiStatements, setXAPIStatements] = useState([] as xAPIStatement[]);
 
   useEffect(() => {
     setWallets(getAvailableWallets());
@@ -220,7 +231,7 @@ function App() {
     });
   }
 
-  const processPendingStatements = async function (addr:any) {
+  const fetchPendingStatements = async function (addr:any) {
 
     const raw = await getChangeAddress();
     const walletAddress = Address.from_bytes(Buffer.from(raw, "hex")).to_bech32()
@@ -235,7 +246,8 @@ function App() {
         setMessage(data['message'])
       }
       else {
-        postToCardano(data['hashes'])
+        //postToCardano(data['hashes'])
+        setXAPIStatements(data['hashes'])
       }
     });
   };
@@ -270,15 +282,31 @@ function App() {
                 <><div className="flex py-2">
                     {message ? <a className="text-[#194866] underline mt-3 text-sm" href={message} target="_blank">{message}</a> : null}
                   </div>
-                <div className="flex justify-between items-center">
+                  <div className="flex ">
                     <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{getMoodleLink(address)}}>Get Moodle Login</button>
-                    
-                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{processPendingStatements(address)}}>Post xAPI Statements to Cardano</button>
+                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4 ml-4" onClick={()=>{fetchPendingStatements(address)}}>Fetch Pending xAPI Statements</button>
+                  </div>
+                  
+                  {xapiStatements.length > 0 ?
+                    <>
+                    <div className="mt-4 rounded-lg border border-blue-500 p-4 mb-4">
+                      <div>
+                        <p><strong>Following are the xAPI Statements pending to post to Cardano. Click on any statement to view it.</strong></p>
+                        <ol>
+                          {xapiStatements.map((xapio) => <li key={`${xapio.id}`} ><span>{xapio.id}. </span><a target="_blank" href={`https://gateway.pinata.cloud/ipfs/${xapio.hash}`}>{xapio.hash}</a></li>)}
+                        </ol>
+                        <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{postToCardano(xapiStatements)}}>Post to Cardano</button>
+                      </div>
+                    </div></>: <></>
+                  }
+                  
+                  <div className="flex">
                     <div className='flex'>
                       <img src="/logo.svg" className="mr-4 h-6" alt="TxPipe Logo" />
                       <h2 className="text-m text-gray-400 font-normal">Starter Kit provided by TxPipe</h2>
                     </div>
-                  </div></> : <></>
+                  </div>
+                  </> : <></>
                 }
               </> : 
               <><div className="flex justify-between items-center">
