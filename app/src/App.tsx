@@ -26,6 +26,17 @@ function WalletCard(props: { wallet: WalletInfo, handleClick: Function }) {
   );
 }
 
+interface xAPIStatement {
+  id: string;
+  wallet_address: string;
+  statement_id: string,
+  hash: string,
+  status: string,
+  processed_time: string,
+  error: string,
+  cardano_hash: string,
+}
+
 function App() {
   const [wallets, setWallets] = useState([] as WalletInfo[]);
   const [enabledWallet, setEnabledWallet] = useState<WalletInfo>();
@@ -34,6 +45,8 @@ function App() {
   const [address, setAddress] = useState<Address>();
   const [error, setError] = useState();
   const [message, setMessage] = useState("");
+  const [xapiStatements, setXAPIStatements] = useState([] as xAPIStatement[]);
+  const [xapiPendingStatements, setXAPIPendingStatements] = useState([] as xAPIStatement[]);
 
   useEffect(() => {
     setWallets(getAvailableWallets());
@@ -216,12 +229,13 @@ function App() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data)
-      setMessage(data['message'])
+      setMessage(data['message'] + " => " + submittedTxHash)
+      setXAPIPendingStatements([])
+      fetchAllStatements()
     });
   }
 
-  const processPendingStatements = async function (addr:any) {
-
+  const fetchPendingStatements = async function () {
     const raw = await getChangeAddress();
     const walletAddress = Address.from_bytes(Buffer.from(raw, "hex")).to_bech32()
     var TRAXLRSURL = process.env.REACT_APP_TRAXLRSURL
@@ -235,7 +249,26 @@ function App() {
         setMessage(data['message'])
       }
       else {
-        postToCardano(data['hashes'])
+        setXAPIPendingStatements(Object.values(data['hashes']))
+      }
+    });
+  };
+
+  const fetchAllStatements = async function () {
+    const raw = await getChangeAddress();
+    const walletAddress = Address.from_bytes(Buffer.from(raw, "hex")).to_bech32()
+    var TRAXLRSURL = process.env.REACT_APP_TRAXLRSURL
+    var TRAXLRSDATALIMIT = 999999
+
+    fetch(TRAXLRSURL + 'api/get-all-data?walletaddress=' + walletAddress + '&limit=' + TRAXLRSDATALIMIT, {method: 'GET'})
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data)
+      if(data['errorcode']){
+        setMessage(data['message'])
+      }
+      else {
+        setXAPIStatements(Object.values(data['hashes']))
       }
     });
   };
@@ -244,7 +277,7 @@ function App() {
     <div className="w-screen h-screen bg-white overflow-auto">
         <div className="container max-w-6xl p-16  h-full w-full">
             <header className="mb-3 py-6 w-full flex flex-col justify-between">                
-                <h3 className="text-3xl text-orange-500 font-extrabold mt-4 ">Moodle Cardano Connection</h3>
+                <h3 className="text-3xl text-orange-500 font-extrabold mt-4 ">PoLiL App</h3>
                 <div className="mt-8 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4">
                     <h1 className="font-bold">Connect to a Wallet</h1>
                     <h3 className="text-sm text-blue-500 mt-2">Select which wallet to connect and perform basic interactions.</h3>
@@ -270,15 +303,55 @@ function App() {
                 <><div className="flex py-2">
                     {message ? <a className="text-[#194866] underline mt-3 text-sm" href={message} target="_blank">{message}</a> : null}
                   </div>
-                <div className="flex justify-between items-center">
+                  <div className="flex ">
                     <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{getMoodleLink(address)}}>Get Moodle Login</button>
-                    
-                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{processPendingStatements(address)}}>Post xAPI Statements to Cardano</button>
+                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4 ml-4" onClick={()=>{fetchAllStatements()}}>Show All xAPI Statements</button>
+                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4 ml-4" onClick={()=>{fetchPendingStatements()}}>Get Pending xAPI Statements</button>                    
+                  </div>
+                  
+                  {xapiPendingStatements.length > 0 ?
+                    <>
+                    <div className="mt-4 rounded-lg border border-blue-500 p-4 mb-4">
+                      <div>
+                        <p><strong>Pending xAPI Statements:</strong> <small>(Note: Click on any Pinata Hash to view xAPI Statement.)</small></p>
+                        <ol>
+                          {xapiPendingStatements.map((xapio) => <li key={`${xapio.id}`} ><span>{xapio.id}. </span><a target="_blank" href={`https://gateway.pinata.cloud/ipfs/${xapio.hash}`}>{xapio.hash}</a></li>)}
+                        </ol>
+                        <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{postToCardano(xapiPendingStatements)}}>Post to Cardano</button>
+                      </div>
+                    </div></>: <></>
+                  }
+
+                  {xapiStatements.length > 0 ?
+                    <>
+                    <div className="mt-4 rounded-lg border border-blue-500 p-4 mb-4">
+                      <div>
+                        <p><strong>xAPI Statements:</strong> <small>(Note: Click on any Pinata Hash to view xAPI Statement. You can scan Cardano Hash on cardanoscan.io)</small></p>
+                        <table>
+                          <tr>
+                            <th></th>
+                            <th>xAPI Hash (Saved on Pinata)</th>
+                            <th>Cardano Hash</th>
+                          </tr>
+                          {xapiStatements.map((xapio) =>
+                            <tr key={`${xapio.id}`}>
+                              <th>{xapio.id}.</th>
+                              <th><a target="_blank" href={`https://gateway.pinata.cloud/ipfs/${xapio.hash}`}>{xapio.hash}</a></th>
+                              <th>{xapio.cardano_hash != null ? xapio.cardano_hash : "Pending to post" }</th>
+                            </tr>
+                            )}
+                        </table>
+                      </div>
+                    </div></>: <></>
+                  }
+                  
+                  <div className="flex">
                     <div className='flex'>
                       <img src="/logo.svg" className="mr-4 h-6" alt="TxPipe Logo" />
                       <h2 className="text-m text-gray-400 font-normal">Starter Kit provided by TxPipe</h2>
                     </div>
-                  </div></> : <></>
+                  </div>
+                  </> : <></>
                 }
               </> : 
               <><div className="flex justify-between items-center">
