@@ -80,7 +80,7 @@ async function getNetwork(): Promise<string>{
   // Converte the network id to human readable names
   switch(networkId) {
     case 0:
-      return 'testnet';
+      return 'testnet preprod';
     case 1:
       return 'mainnet';
     default:

@@ -15,11 +15,7 @@ function WalletCard(props: { wallet: WalletInfo, handleClick: Function }) {
           <button className='flex flex-col' onClick={() => props.handleClick(props.wallet.id)}>
             <div className="flex">
                 <img src={props.wallet.icon} alt='wallet-logo' width={28} height={28}/>
-                <span className='text-gray-300 ml-2 text-sm grow'>{`id: ${props.wallet.id}`}</span>
-            </div>
-            <h1 className="text-white font-bold line-clamp-1 mb-2 mt-4">{`Name: ${props.wallet.name}`}</h1>
-            <div className="flex mt-auto">
-                <p className="flex-1 text-gray-300 text-sm">{`api version: ${props.wallet.apiVersion}`}</p>
+                <span className='text-gray-300 ml-2 text-sm grow'>{props.wallet.id}</span>
             </div>
             </button>
         </div>
@@ -125,7 +121,7 @@ function App() {
         priceMem: 0.0577,
         priceStep: 0.0000721,
         coinsPerUtxoWord: "34482",
-        lovelaceToSend: 3000000,
+        lovelaceToSend: 1000000,
         addressBech32SendADA: process.env.REACT_APP_TX_RECEIVER?.toString(),
         changeAddress: walletAddress
     }
@@ -277,10 +273,11 @@ function App() {
     <div className="w-screen h-screen bg-white overflow-auto">
         <div className="container max-w-6xl p-16  h-full w-full">
             <header className="mb-3 py-6 w-full flex flex-col justify-between">                
-                <h3 className="text-3xl text-orange-500 font-extrabold mt-4 ">PoLiL App</h3>
-                <div className="mt-8 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4">
-                    <h1 className="font-bold">Connect to a Wallet</h1>
-                    <h3 className="text-sm text-blue-500 mt-2">Select which wallet to connect and perform basic interactions.</h3>
+                <h3 className="text-3xl text-orange-500 font-extrabold mt-1 ">PoLiL</h3>
+                <h3 className="text-1xl text-orange-500 font-extrabold mt-1 ">Proof of Lifelong Learning</h3>
+                <div className="mt-8 rounded-lg border bg-orange-600 bg-opacity-10 p-1 text-[#194866] mb-4">
+                    <h1 className="font-bold">All your learning actvities in a Cardano wallet</h1>
+                    
                 </div>
             </header>
 
@@ -295,29 +292,27 @@ function App() {
             <div className='mt-8'>
               { enabledWallet ? 
               <>
-                <h3 className="text-l text-[#194866] font-extrabold mt-4">{`Connected to ${enabledWallet.name}`}</h3>
-                <h3 className="text-sm text-[#194866] mt-4">{balance ? `Wallet Balance: ${balance}` : null}</h3>
-                <h3 className="text-sm text-[#194866] mt-2">{network ? `Connected to: ${network}` : null}</h3>
-                  
+                <h3 className="text-l text-[#194866] font-extrabold mt-4">{`Connected to ${enabledWallet.name}`} {network ? `- ${network}` : null}</h3>
+                <h3 className="text-sm text-[#194866] mt-4">{balance ? `Wallet Balance: ${balance}` : null}</h3>  
                 { address ?
                 <><div className="flex py-2">
-                    {message ? <a className="text-[#194866] underline mt-3 text-sm" href={message} target="_blank">{message}</a> : null}
+                    {message ? <a className="text-[#194866] underline mt-3 text-sm" href={message} target="_blank" rel="noreferrer">{message}</a> : null}
                   </div>
                   <div className="flex ">
-                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{getMoodleLink(address)}}>Get Moodle Login</button>
-                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4 ml-4" onClick={()=>{fetchAllStatements()}}>Show All xAPI Statements</button>
-                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4 ml-4" onClick={()=>{fetchPendingStatements()}}>Get Pending xAPI Statements</button>                    
+                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{getMoodleLink(address)}}>Access to Moodle</button>
+                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4 ml-4" onClick={()=>{fetchAllStatements()}}>Learning statements DONE</button>
+                    <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4 ml-4" onClick={()=>{fetchPendingStatements()}}>Statements to Confirm & Submit </button>                    
                   </div>
                   
                   {xapiPendingStatements.length > 0 ?
                     <>
                     <div className="mt-4 rounded-lg border border-blue-500 p-4 mb-4">
                       <div>
-                        <p><strong>Pending xAPI Statements:</strong> <small>(Note: Click on any Pinata Hash to view xAPI Statement.)</small></p>
+                        <p><strong>Pending learning statements</strong> <small>(You can decide what is relevant to store by clicking the transaction hash)</small></p>
                         <ol>
-                          {xapiPendingStatements.map((xapio) => <li key={`${xapio.id}`} ><span>{xapio.id}. </span><a target="_blank" href={`https://gateway.pinata.cloud/ipfs/${xapio.hash}`}>{xapio.hash}</a></li>)}
+                          {xapiPendingStatements.map((xapio) => <li key={`${xapio.id}`} ><span>{xapio.id} </span><a target="_blank" rel="noreferrer" href={`https://gateway.pinata.cloud/ipfs/${xapio.hash}`}>{xapio.hash}</a></li>)}
                         </ol>
-                        <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{postToCardano(xapiPendingStatements)}}>Post to Cardano</button>
+                        <button className="mt-2 rounded-lg border border-blue-500 bg-blue-600 bg-opacity-10 p-4 text-[#194866] mb-4" onClick={()=>{postToCardano(xapiPendingStatements)}}>Submit</button>
                       </div>
                     </div></>: <></>
                   }
@@ -326,18 +321,19 @@ function App() {
                     <>
                     <div className="mt-4 rounded-lg border border-blue-500 p-4 mb-4">
                       <div>
-                        <p><strong>xAPI Statements:</strong> <small>(Note: Click on any Pinata Hash to view xAPI Statement. You can scan Cardano Hash on cardanoscan.io)</small></p>
+                        <p><small>Click on any learning transaction hash to view the full learning statement on IPFS.</small></p>
+                        <p><small>Scan the Cardano hash, on the right network, to verify the transaction.</small></p>
                         <table>
                           <tr>
-                            <th></th>
-                            <th>xAPI Hash (Saved on Pinata)</th>
-                            <th>Cardano Hash</th>
+                            <th>Id</th>
+                            <th>Learning transaction Hash</th>
+                            <th>Cardano transaction Hash</th>
                           </tr>
                           {xapiStatements.map((xapio) =>
                             <tr key={`${xapio.id}`}>
-                              <th>{xapio.id}.</th>
-                              <th><a target="_blank" href={`https://gateway.pinata.cloud/ipfs/${xapio.hash}`}>{xapio.hash}</a></th>
-                              <th>{xapio.cardano_hash != null ? xapio.cardano_hash : "Pending to post" }</th>
+                              <th>{xapio.id}</th>
+                              <th><a target="_blank" rel="noreferrer" href={`https://gateway.pinata.cloud/ipfs/${xapio.hash}`}>{xapio.hash}</a></th>
+                              <th>{xapio.cardano_hash != null ? xapio.cardano_hash : "Waiting your submission" }</th>
                             </tr>
                             )}
                         </table>
@@ -345,23 +341,12 @@ function App() {
                     </div></>: <></>
                   }
                   
-                  <div className="flex">
-                    <div className='flex'>
-                      <img src="/logo.svg" className="mr-4 h-6" alt="TxPipe Logo" />
-                      <h2 className="text-m text-gray-400 font-normal">Starter Kit provided by TxPipe</h2>
-                    </div>
-                  </div>
                   </> : <></>
                 }
               </> : 
               <><div className="flex justify-between items-center">
                   <div>
-                    <h3 className="text-l text-gray-600 font-extrabold mt-4">No wallet is enabled. Select a Wallet to enabled it</h3>
-                  </div>
-                  
-                  <div className='flex '>
-                    <img src="/logo.svg" className="mr-4 h-6" alt="TxPipe Logo" />
-                    <h2 className="text-m text-gray-600 font-normal">Starter Kit provided by TxPipe</h2>
+                    <h3 className="text-l text-gray-600 font-extrabold mt-4">No wallet is connected yet</h3>
                   </div>
                 </div></>}
 
