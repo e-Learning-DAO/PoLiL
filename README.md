@@ -14,9 +14,10 @@ Without a coherent certification system that connects the previous knowledge acq
 ## BUILD YOUR UNIQUE LEARNING JOURNEY
 
 PoLiL is a new holistic approach to online learning which follows learners online and offline and tracks learning progress for life. 
-### Of course, it's also anti-tamper.
-
-
+Of course, it's also anti-tamper.
 [www.polil.net](https://www.polil.net/)
 
 [![PoLiL](https://raw.githubusercontent.com/e-Learning-DAO/PoLiL/main/resources/POLIL%20-%20combines%20multiple%20disciplines%20and%20contexts.jpg)](https://www.polil.net/)
+
+### Video presentation
+[![YouTube](https://user-images.githubusercontent.com/598726/216614585-3522627e-8852-4f90-9211-f6499ba2070e.png)](https://youtu.be/cg_fpuzAd7o)
